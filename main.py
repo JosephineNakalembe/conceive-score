@@ -2,7 +2,6 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import numpy as np
 import pickle
-import os
 
 # Initialize FastAPI app
 app = FastAPI(title="Conception Probability Model API")
@@ -10,14 +9,14 @@ app = FastAPI(title="Conception Probability Model API")
 # Load model and scaler from pickle
 try:
     with open("logistic_regression_model.pkl", "rb") as f:
-        data = pickle.load(f)
+        data = pickle.load(f)  # ✅ Correct loader for pickle-saved model
         model = data["model"]
         scaler = data["scaler"]
         results = data.get("results", None)  # Optional: evaluation metrics
 except Exception as e:
     raise RuntimeError(f"❌ Failed to load model: {e}")
 
-# Define input schema
+# Define input schema for 9 clinical features
 class ModelInput(BaseModel):
     Age: float
     any_disease: int
