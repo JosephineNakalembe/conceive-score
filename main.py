@@ -8,7 +8,7 @@ app = FastAPI(title="Late Fusion Conception Model API")
 
 # Load model and scaler from pickle
 try:
-    with open("late_fusion_model.pkl", "rb") as f:
+    with open("late_fusion_model(1).pkl", "rb") as f:
         data = pickle.load(f)
         model = data["model"]
         scaler = data["scaler"]
