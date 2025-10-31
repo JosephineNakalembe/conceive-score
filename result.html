@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prediction Result</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  .card {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-align: center;
+    max-width: 400px;
+  }
+  h2 { color: #2b7a78; margin-bottom: 15px; }
+  .result-value {
+    font-size: 2em;
+    font-weight: bold;
+    color: #20575a;
+  }
+  button {
+    margin-top: 20px;
+    padding: 12px 25px;
+    background-color: #2b7a78;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  button:hover { background-color: #20575a; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h2>Conception Probability</h2>
+  <p class="result-value" id="resultValue">Loading...</p>
+  <button onclick="window.location.href='predict.html'">Back</button>
+</div>
+
+<script>
+const storedData = localStorage.getItem('prediction_result');
+if (storedData) {
+  const result = JSON.parse(storedData);
+  document.getElementById('resultValue').textContent =
+    result.probability ? (result.probability * 100).toFixed(2) + '%' : 'No result found';
+} else {
+  document.getElementById('resultValue').textContent = 'No prediction data found.';
+}
+</script>
+
+</body>
+</html>
