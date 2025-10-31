@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conceive Score</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f0f4f8;
+        }
+        .card {
+            background: white;
+            padding: 50px;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 16px;
+            margin-top: 20px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Welcome to CONCEIVE SCORE</h1>
+        <p>Predict your probability of conception easily.</p>
+        <button onclick="goToPredict()">Predict</button>
+    </div>
+
+    <script>
+        function goToPredict() {
+            window.location.href = "predict.html";
+        }
+    </script>
+</body>
+</html>
