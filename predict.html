@@ -117,8 +117,9 @@ button.submit-btn:hover{ background-color:var(--teal-dark); }
   <h1>Conception Probability Prediction</h1>
 
   <form id="predictForm">
-    <!-- Hidden patient_index auto-filled -->
-    <input type="hidden" name="patient_index" id="patient_index">
+
+    <label>Patient Index</label>
+    <input type="number" name="patient_index" id="patient_index" required>
 
     <label>Age (years)</label><input type="number" name="AGE" required>
     <label>BMI (Body Mass Index)</label><input type="number" name="BMI" required>
@@ -147,7 +148,6 @@ const name = localStorage.getItem('patient_name') || 'Guest';
 document.getElementById('usernameDisplay').textContent = name;
 document.getElementById('welcomeMessage').textContent = `Welcome ${name} — Conceive Score`;
 
-// Auto-fill patient_index from localStorage (assigned at signup)
 const patientId = localStorage.getItem('patient_id') || ''; 
 document.getElementById('patient_index').value = patientId;
 
@@ -164,15 +164,11 @@ document.getElementById('predictForm').addEventListener('submit', async (e)=>{
     });
     const data = await response.json();
     if(response.ok){
-      // Add date to prediction
       data.date = new Date().toLocaleDateString();
-      // Save last prediction to localStorage
       localStorage.setItem('last_prediction', JSON.stringify(data));
-      // Save to prediction history
       let history = JSON.parse(localStorage.getItem('prediction_history') || '[]');
       history.push(data);
       localStorage.setItem('prediction_history', JSON.stringify(history));
-      // Redirect to result page
       window.location.href='result.html';
     } else {
       alert('Prediction failed: ' + (data.error || 'Unknown error'));
