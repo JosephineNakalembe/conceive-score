@@ -1,521 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Conceive Score - Dashboard</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conceive Score</title>
 
-<!-- Attractive font -->
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
-<!-- Chart.js CDN -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-  :root{
-    --teal:#2b7a78;
-    --teal-dark:#20575a;
-    --muted:#6b6f72;
-    --card-bg:#ffffff;
-    --bg:#f0f4f8;
-    --accent1:#7cd39c;
-    --accent2:#5aa8ff;
-    --accent3:#ffb46b;
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: #f0f4f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
   }
-  body{
-    font-family: 'Montserrat', Arial, sans-serif;
-    margin:0;
-    background:var(--bg);
-    display:flex;
-    min-height:100vh;
+  .card {
+    background: #ffffff;
+    padding: 30px 40px;
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    text-align: center;
+    max-width: 330px;
   }
-
-  /* Sidebar */
-  .sidebar{
-    height:100vh;
-    width:220px;
-    background:var(--teal);
-    color:white;
-    display:flex;
-    flex-direction:column;
-    padding-top:18px;
-    position:fixed;
+  h1 {
+    color: #2b7a78;
+    margin: 0 0 16px;
+    font-size: 24px;
   }
-  .sidebar h2{ text-align:center; margin:8px 0 10px; font-size:20px; font-weight:700; }
-  .sidebar p{ text-align:center; margin:6px 8px; font-weight:500; }
-  .sidebar a{
-    padding:10px 14px; text-decoration:none; color:white; display:flex; align-items:center;
-    gap:10px; margin:6px; border-radius:8px; font-weight:500;
+  p {
+    color: #6b6f72;
+    margin-bottom: 25px;
+    font-size: 14px;
   }
-  .sidebar a:hover{ background:var(--teal-dark); }
-
-  /* Top navbar */
-  .navbar{
-    position:fixed; top:0; left:220px; right:0; height:64px;
-    background:var(--teal); display:flex; align-items:center;
-    padding:0 18px; color:white; box-shadow:0 2px 6px rgba(0,0,0,0.12); z-index:100;
+  .btn {
+    background: #2b7a78;
+    color: white;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.2s;
+    width: 100%;
   }
-  /* welcome message on the right */
-  #welcomeMessage { margin-left:auto; margin-right:14px; font-weight:700; font-size:16px; }
-  .nav-icon{
-    margin-left:8px; background:transparent; border:none; color:white; font-size:18px;
-    width:44px; height:44px; border-radius:10px; cursor:pointer;
-  }
-  .nav-icon:hover{ background:var(--teal-dark); }
-
-  /* Main content */
-  .main-content{ margin-left:220px; padding:22px; flex:1; margin-top:80px; }
-  h1{ color:var(--teal); margin:0 0 12px 0; }
-
-  /* Cards */
-  .cards{ display:flex; flex-wrap:wrap; gap:18px; margin-bottom:20px; }
-  .card{
-    background:var(--card-bg); flex:1 1 220px; padding:18px; border-radius:12px;
-    box-shadow:0 6px 18px rgba(0,0,0,0.06); transition:transform 0.22s, box-shadow 0.22s;
-  }
-  .card:hover{ transform:translateY(-6px); box-shadow:0 12px 28px rgba(0,0,0,0.12); }
-  .card h3{ margin:0 0 8px; color:var(--teal); }
-  .card p{ margin:0; color:var(--muted); }
-
-  /* Dashboard layout (pie + calendar) */
-  .dashboard-grid{
-    display:grid;
-    grid-template-columns: 1fr 420px;
-    gap:20px;
-    align-items:start;
-  }
-
-  .chart-card, .calendar-card{
-    background:var(--card-bg); padding:16px; border-radius:12px;
-    box-shadow:0 6px 18px rgba(0,0,0,0.06);
-  }
-
-  .chart-card h3, .calendar-card h3{ margin:0 0 10px; color:var(--teal); }
-
-  /* Calendar */
-  .calendar{
-    width:100%;
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-  }
-  .calendar .month-header{ display:flex; justify-content:space-between; align-items:center; }
-  .month-header button{ background:transparent; border:none; color:var(--teal); font-weight:700; cursor:pointer; padding:6px 10px; border-radius:8px; }
-  .weekday-row, .days-grid{ display:grid; grid-template-columns: repeat(7, 1fr); gap:6px; }
-  .weekday{ text-align:center; font-size:13px; color:var(--muted); padding:6px 4px; }
-  .day{
-    min-height:58px; border-radius:8px; padding:6px; background:#fff; display:flex; flex-direction:column; gap:4px;
-    align-items:flex-start; box-shadow:0 2px 6px rgba(0,0,0,0.04); cursor:pointer;
-  }
-  .day .num{ font-weight:700; color:#222; font-size:14px; }
-  .day.small{ background:transparent; box-shadow:none; cursor:default; }
-  /* highlights */
-  .period-day{ background: linear-gradient(180deg,#ffd9d9,#ffecec); border:2px solid #ff8a80; }
-  .fertile-day{ background: linear-gradient(180deg,#e8f8ec,#f2fff4); border:2px solid var(--accent1); }
-  .ovulation-day{ background: linear-gradient(180deg,#d9ecff,#eef8ff); border:2px solid var(--accent2); }
-  .day .label { font-size:12px; color:var(--muted); margin-left:4px; }
-
-  /* legend */
-  .legend{ display:flex; gap:12px; align-items:center; margin-top:10px; flex-wrap:wrap; color:var(--muted); }
-  .legend .item{ display:flex; gap:8px; align-items:center; font-size:14px; }
-  .swatch{ width:14px; height:14px; border-radius:4px; }
-
-  /* Floating CTA */
-  .cta {
-    position:fixed;
-    right:20px;
-    bottom:22px;
-    z-index:200;
-  }
-  .cta button{
-    background: linear-gradient(90deg, #ff7a5c, #ff6b6b);
-    color:white; border:none; padding:14px 18px; border-radius:14px; font-weight:700; cursor:pointer;
-    display:flex; align-items:center; gap:10px; box-shadow:0 10px 30px rgba(255,107,107,0.18);
-    transition: transform 0.18s, box-shadow 0.18s;
-  }
-  .cta button:hover{ transform: translateY(-4px); box-shadow:0 18px 40px rgba(255,107,107,0.22); }
-  .pulse { animation: pulse 1.8s infinite; }
-  @keyframes pulse {
-    0% { box-shadow: 0 6px 20px rgba(255,107,107,0.18); transform:translateY(0); }
-    50% { box-shadow: 0 14px 36px rgba(255,107,107,0.28); transform:translateY(-3px); }
-    100% { box-shadow: 0 6px 20px rgba(255,107,107,0.18); transform:translateY(0); }
-  }
-
-  /* responsive */
-  @media (max-width:1000px){
-    .dashboard-grid{ grid-template-columns: 1fr; }
-    .navbar{ left:0; }
-    .sidebar{ display:none; position:relative; width:100%; height:auto; } /* hide sidebar on small screens */
-    .main-content{ margin-left:0; margin-top:70px; padding:14px; }
+  .btn:hover {
+    background: #20575a;
   }
 </style>
 </head>
 <body>
 
-  <div class="sidebar">
-    <h2>Conceive Score</h2>
-    <p id="usernameDisplay">Guest</p>
-
-     <a href="dashboard.html"><span>🏠</span> Dashboard</a>
-    <a href="predict.html"><span>📝</span> Make Prediction</a>
-    <a href="history.html"><span>📜</span> Cycle History</a>
-    <a href="Tips & Guidelines.html"><span>💡</span> Tips & Guides</a>
-    <a href="settings.html"><span>⚙️</span> Settings</a>
-    <a href="coceptionstatus.html"><span>📊</span> Conception Stats</a>
-    <a href="notification.html"><span>🔔</span> Notifications</a>
-  </div>
-
-  <div class="navbar">
-    <!-- navbar icons on extreme right; welcome message placed before them on the right side -->
-    <div style="flex:1"></div>
-    <div id="welcomeMessage">Welcome to Conceive Score</div>
-    <button class="nav-icon" title="Dashboard" onclick="location.href='dashboard.html'">🏠</button>
-    <button class="nav-icon" title="Predict" onclick="location.href='predict.html'">📝</button>
-    <button class="nav-icon" title="History" onclick="location.href='history.html'">📜</button>
-  </div>
-
-  <div class="main-content">
-    <h1>Dashboard</h1>
-
-    <div class="cards">
-      <div class="card">
-        <h3>Did You Know?</h3>
-        <p>Ovulation usually occurs about 14 days before your next period — tracking helps predict it.</p>
-      </div>
-
-      <div class="card">
-        <h3>Tip</h3>
-        <p>Maintain a healthy BMI and balanced diet to increase chances of conception.</p>
-      </div>
-
-      <div class="card">
-        <h3>Notification</h3>
-        <p id="notifText">No notifications yet — make a prediction to populate the calendar.</p>
-      </div>
-
-      <div class="card">
-        <h3>Quick Action</h3>
-        <p><button onclick="location.href='predict.html'">Add New Cycle / Predict</button></p>
-      </div>
-    </div>
-
-    <div class="dashboard-grid">
-      <div class="chart-card">
-        <h3>Factors Affecting Conception (Estimated)</h3>
-        <canvas id="factorsPie" height="220"></canvas>
-        <div style="margin-top:10px; color:var(--muted); font-size:13px;">
-          These are example weights — they may be personalized later from your data.
-        </div>
-      </div>
-
-      <div class="calendar-card">
-        <h3>Cycle Calendar (Latest Cycle)</h3>
-
-        <div class="calendar">
-          <div class="month-header">
-            <button id="prevMonthBtn">&lt;</button>
-            <div style="font-weight:700;" id="monthLabel">Month</div>
-            <button id="nextMonthBtn">&gt;</button>
-          </div>
-
-          <div class="weekday-row">
-            <div class="weekday">Sun</div>
-            <div class="weekday">Mon</div>
-            <div class="weekday">Tue</div>
-            <div class="weekday">Wed</div>
-            <div class="weekday">Thu</div>
-            <div class="weekday">Fri</div>
-            <div class="weekday">Sat</div>
-          </div>
-
-          <div class="days-grid" id="daysGrid">
-            <!-- days injected by JS -->
-          </div>
-
-          <div class="legend" id="legend">
-            <div class="item"><div class="swatch" style="background:#ff8a80"></div> Period days</div>
-            <div class="item"><div class="swatch" style="background:var(--accent1)"></div> Fertile window</div>
-            <div class="item"><div class="swatch" style="background:var(--accent2)"></div> Ovulation day</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Floating CTA -->
-  <div class="cta">
-    <button id="predictCTA"><span style="font-size:18px">+</span> Predict Cycle</button>
-  </div>
-
-<script>
-/* ---------------------------
-  Helper date functions
-----------------------------*/
-function parseDate(d){
-  if(!d) return null;
-  if(d instanceof Date) return d;
-  const iso = new Date(d);
-  if(!isNaN(iso)) return iso;
-  return null;
-}
-function addDays(date, n){
-  const r = new Date(date);
-  r.setDate(r.getDate() + n);
-  return r;
-}
-function formatISO(date){
-  const y = date.getFullYear();
-  const m = String(date.getMonth()+1).padStart(2,'0');
-  const d = String(date.getDate()).padStart(2,'0');
-  return `${y}-${m}-${d}`;
-}
-function sameDate(a,b){
-  return a && b && a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
-}
-
-/* ---------------------------
-  Load latest cycle logic
-  Reads from cycle_data[] or prediction_history[] and returns last object
-----------------------------*/
-function loadLatestCycle(){
-  let cycleArr = JSON.parse(localStorage.getItem('cycle_data')||'null');
-  if(Array.isArray(cycleArr) && cycleArr.length) return cycleArr[cycleArr.length-1];
-
-  let ph = JSON.parse(localStorage.getItem('prediction_history')||'null');
-  if(Array.isArray(ph) && ph.length){
-    // pick last object that looks like a cycle (has date or cycle_start)
-    for(let i=ph.length-1;i>=0;i--){
-      const item = ph[i];
-      // accept if it has date, cycle_start, or EstimatedDayofOvulation
-      if(item && (item.cycle_start || item.date || item.EstimatedDayofOvulation || item.LengthofCycle)) return item;
-    }
-    return ph[ph.length-1];
-  }
-  return null;
-}
-
-/* ---------------------------
-  Compute marks (period, ovulation, fertile)
-----------------------------*/
-function computeCycleDates(cycle){
-  if(!cycle) return null;
-  // Accept multiple possible keys
-  const cycleStart = parseDate(cycle.cycle_start || cycle.cycleStart || cycle.date || cycle.date_saved || cycle.dateSaved || cycle.date_saved_local || cycle.dateSavedLocal);
-  if(!cycleStart) return null;
-
-  const length = Number(cycle.LengthofCycle || cycle.length || cycle.cycle_length) || null;
-  const estDay = Number(cycle.EstimatedDayofOvulation || cycle.EstimatedDay || cycle.EstimatedDayofOvulation) || null;
-
-  let ovulation = null;
-  if(cycle.ovulation) ovulation = parseDate(cycle.ovulation);
-  else if(estDay && !isNaN(estDay)) ovulation = addDays(cycleStart, estDay - 1);
-  else if(length && !isNaN(length)) {
-    const offset = Math.max(1, length - 14);
-    ovulation = addDays(cycleStart, offset - 1);
-  }
-
-  let fertileStart=null, fertileEnd=null;
-  if(cycle.fertile_start && cycle.fertile_end){
-    fertileStart = parseDate(cycle.fertile_start);
-    fertileEnd = parseDate(cycle.fertile_end);
-  } else if(ovulation){
-    fertileStart = addDays(ovulation, -4);
-    fertileEnd = addDays(ovulation, 1);
-  }
-
-  const periodDays = [];
-  for(let i=0;i<5;i++) periodDays.push(addDays(cycleStart, i));
-
-  return { cycleStart, ovulation, fertileStart, fertileEnd, periodDays, length };
-}
-
-/* ---------------------------
-  Calendar rendering
-----------------------------*/
-let currentYear, currentMonth;
-function openMonth(year, month){
-  currentYear = year; currentMonth = month;
-  document.getElementById('monthLabel').textContent = new Date(year, month, 1).toLocaleString(undefined,{ month:'long', year:'numeric'});
-  renderDays();
-}
-
-function renderDays(){
-  const grid = document.getElementById('daysGrid');
-  grid.innerHTML = '';
-  const firstDay = new Date(currentYear, currentMonth, 1);
-  const startWeekday = firstDay.getDay();
-  const daysInMonth = new Date(currentYear, currentMonth+1, 0).getDate();
-
-  for(let i=0;i<startWeekday;i++){
-    const blank = document.createElement('div');
-    blank.className = 'day small';
-    grid.appendChild(blank);
-  }
-
-  for(let d=1; d<=daysInMonth; d++){
-    const date = new Date(currentYear, currentMonth, d);
-    const cell = document.createElement('div');
-    cell.className = 'day';
-    cell.innerHTML = `<div class="num">${d}</div><div class="label"></div>`;
-
-    if(latestMarks){
-      // period
-      latestMarks.periodDays.forEach(pd=>{
-        if(sameDate(pd, date)) cell.classList.add('period-day');
-      });
-      // fertile
-      if(latestMarks.fertileStart && latestMarks.fertileEnd){
-        let it = new Date(latestMarks.fertileStart);
-        while(it <= latestMarks.fertileEnd){
-          if(sameDate(it, date)) cell.classList.add('fertile-day');
-          it = addDays(it, 1);
-        }
-      }
-      // ovulation
-      if(latestMarks.ovulation && sameDate(latestMarks.ovulation, date)){
-        cell.classList.add('ovulation-day');
-        cell.querySelector('.label').textContent = 'Ovulation';
-      }
-    }
-
-    // click behavior: show summary of latest cycle probability
-    cell.addEventListener('click', ()=>{
-      if(latestCycle && latestCycle.probability != null){
-        const prob = (latestCycle.probability * 100).toFixed(1) + '%';
-        const dateSaved = latestCycle.date || latestCycle.date_saved || latestCycle.dateSaved || 'N/A';
-        alert(`Latest cycle\nProbability: ${prob}\nSaved: ${dateSaved}`);
-      } else if(!latestMarks){
-        alert('No cycle data synced yet. Make a prediction to populate the calendar.');
-      } else {
-        alert('No probability data available for the latest cycle.');
-      }
-    });
-
-    grid.appendChild(cell);
-  }
-}
-
-/* month nav */
-document.addEventListener('click', (e)=>{
-  if(e.target.id === 'prevMonthBtn'){
-    const prev = new Date(currentYear, currentMonth, 1);
-    openMonth(prev.getFullYear(), prev.getMonth()-1);
-  } else if(e.target.id === 'nextMonthBtn'){
-    const nxt = new Date(currentYear, currentMonth, 1);
-    openMonth(nxt.getFullYear(), nxt.getMonth()+1);
-  }
-});
-
-/* ---------------------------
-  Pie chart
-----------------------------*/
-function initPie(){
-  const ctx = document.getElementById('factorsPie').getContext('2d');
-  // Example weights for factors
-  const data = {
-    labels: ['Age','BMI','Hormones','Diet','Workout','Cycle Regularity'],
-    datasets: [{
-      data: [22,15,28,12,8,15],
-      backgroundColor: ['#ff9e9e','#ffd79e','#7cd39c','#7fb3ff','#b088f9','#ffe28a'],
-      borderWidth:0
-    }]
-  };
-  new Chart(ctx, {
-    type: 'pie',
-    data,
-    options: {
-      responsive:true,
-      plugins: {
-        legend: { position: 'bottom' }
-      }
-    }
-  });
-}
-
-/* ---------------------------
-  Load latest cycle and bootstrap UI
-----------------------------*/
-let latestCycle = null;
-let latestMarks = null;
-
-function setupFromLocalStorage(){
-  const candidate = loadLatestCycle();
-  if(!candidate){
-    document.getElementById('notifText').textContent = 'No cycle data yet — make a prediction to auto-sync the calendar.';
-    const now = new Date();
-    openMonth(now.getFullYear(), now.getMonth());
-    latestCycle = null;
-    latestMarks = null;
-    // pulse CTA to encourage action
-    document.querySelector('.cta button').classList.add('pulse');
-    renderDays();
-    return;
-  }
-
-  // if candidate contains nested structure, attempt to normalize (we accept many shapes)
-  latestCycle = candidate;
-
-  // compute marks
-  const marks = computeCycleDates(latestCycle);
-  if(!marks){
-    // try using saved date as cycle_start
-    if(latestCycle.date){
-      const guessed = parseDate(latestCycle.date);
-      if(guessed){
-        latestCycle.cycle_start = formatISO(guessed);
-        const r = computeCycleDates(latestCycle);
-        latestMarks = r;
-      }
-    }
-  } else latestMarks = marks;
-
-  if(!latestMarks || !latestMarks.cycleStart){
-    document.getElementById('notifText').textContent = 'Latest prediction lacks a usable cycle start — include cycle_start when saving predictions.';
-    const now = new Date();
-    openMonth(now.getFullYear(), now.getMonth());
-    renderDays();
-    return;
-  }
-
-  // show notification with probability if present
-  if(latestCycle.probability != null){
-    const prob = Math.round(latestCycle.probability * 100);
-    document.getElementById('notifText').textContent = `Latest prediction: ${prob}% chance of conception (saved ${latestCycle.date || ''})`;
-  } else {
-    document.getElementById('notifText').textContent = `Latest prediction saved on ${latestCycle.date || 'N/A'}.`;
-  }
-
-  const cs = latestMarks.cycleStart;
-  openMonth(cs.getFullYear(), cs.getMonth());
-
-  // stop pulse CTA if data exists
-  document.querySelector('.cta button').classList.remove('pulse');
-}
-
-/* ---------------------------
-  Boot
-----------------------------*/
-document.addEventListener('DOMContentLoaded', ()=>{
-  // show username
-  const name = localStorage.getItem('patient_name') || 'Guest';
-  document.getElementById('usernameDisplay').textContent = name;
-  // place welcome message on right
-  document.getElementById('welcomeMessage').textContent = `Welcome ${name} — Conceive Score`;
-
-  initPie();
-  setupFromLocalStorage();
-
-  // CTA click
-  document.getElementById('predictCTA').addEventListener('click', ()=>{
-    // if not logged in (no patient_name), redirect to login
-    if(!localStorage.getItem('patient_name')){
-      // go to login/signup
-      window.location.href = 'login.html';
-    } else {
-      window.location.href = 'predict.html';
-    }
-  });
-});
-</script>
+<div class="card">
+  <h1>Conceive Score</h1>
+  <p>Track & predict your fertility cycle with smart insights.</p>
+  <button class="btn" onclick="location.href='dashboard.html'">Enter Dashboard</button>
+</div>
 
 </body>
-</html> 
+</html>
