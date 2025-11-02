@@ -1,108 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Conceive Score - Predict</title>
+
+<!-- Attractive font -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    margin: 30px;
-    background: #f0f4f8;
-  }
-  h1 {
-    text-align: center;
-    margin-bottom: 30px;
-    color: #2b7a78;
-  }
-  form {
-    max-width: 600px;
-    margin: auto;
-    background: white;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  }
-  label {
-    display: block;
-    margin-top: 15px;
-    font-weight: bold;
-  }
-  input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-  }
-  button {
-    margin-top: 25px;
-    width: 100%;
-    padding: 12px;
-    background-color: #2b7a78;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  button:hover { background-color: #20575a; }
-  .back { display: block; text-align: center; margin-top: 20px; text-decoration: none; color: #333; }
+:root{
+  --teal:#2b7a78;
+  --teal-dark:#20575a;
+  --muted:#6b6f72;
+  --card-bg:#ffffff;
+  --bg:#f0f4f8;
+}
+body{
+  font-family: 'Montserrat', Arial, sans-serif;
+  margin:0;
+  background:var(--bg);
+  display:flex;
+  min-height:100vh;
+}
+
+/* Sidebar */
+.sidebar{
+  height:100vh;
+  width:220px;
+  background:var(--teal);
+  color:white;
+  display:flex;
+  flex-direction:column;
+  padding-top:18px;
+  position:fixed;
+}
+.sidebar h2{ text-align:center; margin:8px 0 10px; font-size:20px; font-weight:700; }
+.sidebar p{ text-align:center; margin:6px 8px; font-weight:500; }
+.sidebar a{
+  padding:10px 14px; text-decoration:none; color:white; display:flex; align-items:center;
+  gap:10px; margin:6px; border-radius:8px; font-weight:500;
+}
+.sidebar a:hover{ background:var(--teal-dark); }
+
+/* Top navbar */
+.navbar{
+  position:fixed; top:0; left:220px; right:0; height:64px;
+  background:var(--teal); display:flex; align-items:center;
+  padding:0 18px; color:white; box-shadow:0 2px 6px rgba(0,0,0,0.12); z-index:100;
+}
+#welcomeMessage { margin-left:auto; margin-right:14px; font-weight:700; font-size:16px; }
+.nav-icon{
+  margin-left:8px; background:transparent; border:none; color:white; font-size:18px;
+  width:44px; height:44px; border-radius:10px; cursor:pointer;
+}
+.nav-icon:hover{ background:var(--teal-dark); }
+
+/* Main content */
+.main-content{ margin-left:220px; padding:22px; flex:1; margin-top:80px; }
+h1{ color:var(--teal); text-align:center; margin-bottom:25px; }
+
+/* Form card */
+form{
+  max-width:650px;
+  margin:auto;
+  background:var(--card-bg);
+  padding:25px 30px;
+  border-radius:12px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.06);
+}
+label{ display:block; margin-top:15px; font-weight:600; color:#333; }
+input, select{
+  width:100%; padding:10px; margin-top:5px;
+  border-radius:6px; border:1px solid #ccc;
+}
+button.submit-btn{
+  margin-top:25px; width:100%; padding:14px;
+  background-color:var(--teal); color:white;
+  border:none; border-radius:10px;
+  font-size:16px; font-weight:700;
+  cursor:pointer; transition:0.2s;
+}
+button.submit-btn:hover{ background-color:var(--teal-dark); }
+
+/* responsive */
+@media(max-width:900px){
+  .navbar{ left:0; }
+  .sidebar{ display:none; }
+  .main-content{ margin-left:0; margin-top:70px; padding:14px; }
+}
 </style>
 </head>
 <body>
 
-<h1>Conception Probability Prediction</h1>
+<div class="sidebar">
+  <h2>Conceive Score</h2>
+  <p id="usernameDisplay">Guest</p>
+  <a href="dashboard.html"><span>🏠</span> Dashboard</a>
+  <a href="predict.html"><span>📝</span> Make Prediction</a>
+  <a href="history.html"><span>📜</span> Cycle History</a>
+  <a href="Tips & Guidelines.html"><span>💡</span> Tips & Guides</a>
+  <a href="settings.html"><span>⚙️</span> Settings</a>
+  <a href="coceptionstatus.html"><span>📊</span> Conception Stats</a>
+  <a href="notification.html"><span>🔔</span> Notifications</a>
+</div>
 
-<form id="predictForm">
-  <label>AGE:</label><input type="number" name="AGE" required>
-  <label>BMI:</label><input type="number" name="BMI" required>
-  <label>E2:</label><input type="number" name="E2" required>
-  <label>Progesterone:</label><input type="number" name="Progesterone" required>
-  <label>LH:</label><input type="number" name="LH" required>
-  <label>FSH:</label><input type="number" name="FSH" required>
-  <label>Any Disease (0 or 1):</label><input type="number" name="any_disease" required>
-  <label>Weight (kg):</label><input type="number" name="Weight_kg" required>
-  <label>Height (m):</label><input type="number" name="Height_m" required>
-  <label>Workout Type:</label><input type="number" name="Workout_Type" required>
-  <label>Diet Type:</label><input type="number" name="diet_type" required>
-  <label>Cycle Number:</label><input type="number" name="CycleNumber" required>
-  <label>Length of Cycle:</label><input type="number" name="LengthofCycle" required>
-  <label>Estimated Day of Ovulation:</label><input type="number" name="EstimatedDayofOvulation" required>
-  <label>Length of Luteal Phase:</label><input type="number" name="LengthofLutealPhase" required>
-  <label>Total Days of Fertility:</label><input type="number" name="TotalDaysofFertility" required>
-  <label>Gravida:</label><input type="number" name="Gravida" required>
-  <label>Patient Index:</label><input type="number" name="patient_index" required>
+<div class="navbar">
+  <div style="flex:1"></div>
+  <div id="welcomeMessage">Welcome to Conceive Score</div>
+  <button class="nav-icon" title="Dashboard" onclick="location.href='dashboard.html'">🏠</button>
+  <button class="nav-icon" title="Predict" onclick="location.href='predict.html'">📝</button>
+  <button class="nav-icon" title="History" onclick="location.href='history.html'">📜</button>
+</div>
 
-  <button type="submit">Predict</button>
-</form>
+<div class="main-content">
+  <h1>Conception Probability Prediction</h1>
 
-<a href="index.html" class="back">← Back to Home</a>
+  <form id="predictForm">
+    <!-- Hidden patient_index auto-filled -->
+    <input type="hidden" name="patient_index" id="patient_index">
+
+    <label>Age (years)</label><input type="number" name="AGE" required>
+    <label>BMI (Body Mass Index)</label><input type="number" name="BMI" required>
+    <label>Estradiol (E2) - “Estrogen Level”</label><input type="number" name="E2" required>
+    <label>Progesterone - “Luteal Hormone”</label><input type="number" name="Progesterone" required>
+    <label>LH - “Ovulation Trigger Hormone”</label><input type="number" name="LH" required>
+    <label>FSH - “Follicle Stimulating Hormone”</label><input type="number" name="FSH" required>
+    <label>Any Disease (0=No, 1=Yes)</label><input type="number" name="any_disease" required>
+    <label>Weight (kg)</label><input type="number" name="Weight_kg" required>
+    <label>Height (m)</label><input type="number" name="Height_m" required>
+    <label>Workout Type (0=None, 1=Light, 2=Moderate, 3=Heavy)</label><input type="number" name="Workout_Type" required>
+    <label>Diet Type (0=Poor,1=Balanced,2=Healthy)</label><input type="number" name="diet_type" required>
+    <label>Cycle Number</label><input type="number" name="CycleNumber" required>
+    <label>Length of Cycle (days)</label><input type="number" name="LengthofCycle" required>
+    <label>Estimated Day of Ovulation</label><input type="number" name="EstimatedDayofOvulation" required>
+    <label>Length of Luteal Phase (days)</label><input type="number" name="LengthofLutealPhase" required>
+    <label>Total Days of Fertility</label><input type="number" name="TotalDaysofFertility" required>
+    <label>Gravida (Number of pregnancies)</label><input type="number" name="Gravida" required>
+
+    <button type="submit" class="submit-btn">Predict</button>
+  </form>
+</div>
 
 <script>
-document.getElementById('predictForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
+const name = localStorage.getItem('patient_name') || 'Guest';
+document.getElementById('usernameDisplay').textContent = name;
+document.getElementById('welcomeMessage').textContent = `Welcome ${name} — Conceive Score`;
 
+// Auto-fill patient_index from localStorage (assigned at signup)
+const patientId = localStorage.getItem('patient_id') || ''; 
+document.getElementById('patient_index').value = patientId;
+
+document.getElementById('predictForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
   const formData = new FormData(e.target);
   const body = Object.fromEntries(formData.entries());
 
   try {
     const response = await fetch('https://conceive-score-app.onrender.com/predict', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method:'POST',
+      headers:{ 'Content-Type':'application/json' },
       body: JSON.stringify(body)
     });
-
     const data = await response.json();
-    if (response.ok) {
-      // Save result and go to result page
-      localStorage.setItem('prediction_result', JSON.stringify(data));
-      window.location.href = 'result.html';
+    if(response.ok){
+      // Add date to prediction
+      data.date = new Date().toLocaleDateString();
+      // Save last prediction to localStorage
+      localStorage.setItem('last_prediction', JSON.stringify(data));
+      // Save to prediction history
+      let history = JSON.parse(localStorage.getItem('prediction_history') || '[]');
+      history.push(data);
+      localStorage.setItem('prediction_history', JSON.stringify(history));
+      // Redirect to result page
+      window.location.href='result.html';
     } else {
       alert('Prediction failed: ' + (data.error || 'Unknown error'));
     }
-  } catch (error) {
-    alert('Error connecting to server: ' + error.message);
+  } catch(err){
+    alert('Error connecting to server: ' + err.message);
   }
 });
 </script>

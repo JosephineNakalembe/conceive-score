@@ -3,56 +3,115 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prediction Result</title>
+<title>Conceive Score - Result</title>
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f4f8;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  .card {
-    background: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    text-align: center;
-    max-width: 400px;
-  }
-  h2 { color: #2b7a78; margin-bottom: 15px; }
-  .result-value {
-    font-size: 2em;
-    font-weight: bold;
-    color: #20575a;
-  }
-  button {
-    margin-top: 20px;
-    padding: 12px 25px;
-    background-color: #2b7a78;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-  button:hover { background-color: #20575a; }
+body { font-family: Arial, sans-serif; margin:0; background:#f0f4f8; display:flex; min-height:100vh; }
+
+/* Sidebar */
+.sidebar {
+  height: 100vh;
+  width:220px;
+  background:#2b7a78;
+  color:white;
+  display:flex;
+  flex-direction:column;
+  padding-top:20px;
+  position:fixed;
+}
+.sidebar h2 { text-align:center; margin-bottom:20px; font-size:20px; }
+.sidebar p { text-align:center; margin-bottom:20px; }
+.sidebar a { padding:12px 20px; text-decoration:none; color:white; display:block; margin:5px 0; border-radius:5px; }
+.sidebar a:hover { background:#20575a; }
+
+/* Top navbar */
+.navbar {
+  position:fixed;
+  top:0; left:220px; right:0;
+  height:60px;
+  background:#2b7a78;
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  padding:0 20px;
+  color:white;
+  box-shadow:0 2px 5px rgba(0,0,0,0.2);
+  z-index:100;
+}
+.navbar button { margin-left:15px; padding:8px 14px; background:#20575a; color:white; border:none; border-radius:5px; cursor:pointer; }
+.navbar button:hover { background:#18625f; }
+
+/* Main content */
+.main-content { margin-left:220px; padding:20px; flex:1; margin-top:70px; text-align:center; }
+.card { background:white; padding:30px; border-radius:15px; box-shadow:0 4px 12px rgba(0,0,0,0.1); max-width:500px; margin:auto; }
+.result-value { font-size:2em; font-weight:bold; color:#20575a; margin-top:10px; }
+.advice { margin-top:20px; text-align:left; }
+.advice h3 { color:#2b7a78; }
+button.submit-btn { margin-top:20px; padding:12px 25px; background-color:#2b7a78; color:white; border:none; border-radius:8px; cursor:pointer; }
+button.submit-btn:hover { background-color:#20575a; }
+
+/* Simple graph placeholder */
+.graph { margin-top:20px; background:#e0f0f5; height:150px; border-radius:10px; display:flex; justify-content:center; align-items:center; color:#20575a; font-weight:bold; }
 </style>
 </head>
 <body>
 
-<div class="card">
-  <h2>Conception Probability</h2>
-  <p class="result-value" id="resultValue">Loading...</p>
-  <button onclick="window.location.href='predict.html'">Back</button>
+<div class="sidebar">
+  <h2>Conceive Score</h2>
+  <p id="usernameDisplay">Guest</p>
+  <a href="dashboard.html"><span>🏠</span> Dashboard</a>
+    <a href="predict.html"><span>📝</span> Make Prediction</a>
+    <a href="history.html"><span>📜</span> Cycle History</a>
+    <a href="Tips & Guidelines.html"><span>💡</span> Tips & Guides</a>
+    <a href="settings.html"><span>⚙️</span> Settings</a>
+    <a href="coceptionstatus.html"><span>📊</span> Conception Stats</a>
+    <a href="notification.html"><span>🔔</span> Notifications</a>
+</div>
+
+<div class="navbar">
+  <span id="welcomeMessage">Welcome to Conceive Score</span>
+  <button onclick="window.location.href='dashboard.html'">Dashboard</button>
+  <button onclick="window.location.href='predict.html'">Predict</button>
+  <button onclick="window.location.href='history.html'">History</button>
+</div>
+
+<div class="main-content">
+  <div class="card">
+    <h2>Conception Probability</h2>
+    <p class="result-value" id="resultValue">Loading...</p>
+
+    <div class="advice" id="adviceSection">
+      <h3>Advice to Improve Chances:</h3>
+      <ul id="adviceList"></ul>
+    </div>
+
+    <div class="graph">Conception Probability Graph Placeholder</div>
+
+    <button class="submit-btn" onclick="window.location.href='predict.html'">Back to Predict</button>
+  </div>
 </div>
 
 <script>
-const storedData = localStorage.getItem('prediction_result');
-if (storedData) {
+const storedData = localStorage.getItem('last_prediction');
+const name = localStorage.getItem('patient_name') || 'Guest';
+document.getElementById('usernameDisplay').textContent = name;
+document.getElementById('welcomeMessage').textContent = `Welcome ${name} to Conceive Score`;
+
+if(storedData){
   const result = JSON.parse(storedData);
-  document.getElementById('resultValue').textContent =
-    result.probability ? (result.probability * 100).toFixed(2) + '%' : 'No result found';
+  const prob = result.probability ? (result.probability*100).toFixed(2)+'%' : 'No result found';
+  document.getElementById('resultValue').textContent = prob;
+
+  // Example advice logic
+  const advice = [];
+  if(result.AGE && result.AGE>35) advice.push("Consider consulting a fertility specialist for age-related guidance.");
+  if(result.BMI && (result.BMI<18.5 || result.BMI>25)) advice.push("Maintain a healthy BMI for optimal fertility.");
+  if(result.Workout_Type==0) advice.push("Incorporate light to moderate physical activity.");
+  if(result.diet_type==0) advice.push("Adopt a balanced diet rich in vitamins and minerals.");
+
+  const adviceList = document.getElementById('adviceList');
+  advice.forEach(a => {
+    const li = document.createElement('li'); li.textContent = a; adviceList.appendChild(li);
+  });
 } else {
   document.getElementById('resultValue').textContent = 'No prediction data found.';
 }

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conceive Score - Dashboard</title>
+<style>
+  body { margin:0; font-family: Arial, sans-serif; background:#f0f4f8; display:flex; }
+  /* Sidebar */
+  .sidebar {
+    height: 100vh;
+    width: 220px;
+    background-color: #2b7a78;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    position: fixed;
+  }
+  .sidebar h2 { text-align:center; margin-bottom:30px; font-size:20px; }
+  .sidebar a {
+    padding: 12px 20px;
+    text-decoration: none;
+    color: white;
+    display: block;
+    margin: 5px 0;
+    border-radius: 5px;
+  }
+  .sidebar a:hover { background-color: #20575a; }
+  .sidebar .patient-info { text-align:center; margin-bottom:20px; font-size:14px; }
+  
+  /* Main content */
+  .main-content {
+    margin-left: 220px;
+    padding: 30px;
+    flex:1;
+  }
+
+  button { padding:12px 25px; background:#2b7a78; color:white; border:none; border-radius:8px; cursor:pointer; margin-top:10px; }
+  button:hover { background:#20575a; }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>Conceive Score</h2>
+  <div class="patient-info" id="patientInfo">
+    <!-- Patient Name & ID inserted by JS -->
+  </div>
+  <a href="index.html">Dashboard</a>
+  <a href="predict.html">Add New Cycle</a>
+  <a href="history.html">Cycle History</a>
+  <a href="#" onclick="logout()">Logout</a>
+</div>
+
+<div class="main-content">
+  <h1>Welcome to your Dashboard</h1>
+  <p>Track your cycles, view predictions, and manage your fertility data.</p>
+  <!-- Additional dashboard content -->
+</div>
+
+<script>
+const name = localStorage.getItem('patient_name');
+const patientID = localStorage.getItem('patient_id');
+
+const patientInfo = document.getElementById('patientInfo');
+if(name && patientID){
+  patientInfo.textContent = `${name} (${patientID})`;
+} else {
+  patientInfo.textContent = 'Guest';
+}
+
+function logout(){
+  localStorage.removeItem('patient_id');
+  localStorage.removeItem('patient_name');
+  window.location.href = 'index.html';
+}
+</script>
+
+</body>
+</html>
