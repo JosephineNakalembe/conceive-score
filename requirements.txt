@@ -1,7 +1,8 @@
-fastapi
-uvicorn
+flask
+flask-cors
 numpy==1.23.5
 pandas
 scikit-learn==1.2.2
 torch
 joblib
+gunicorn
