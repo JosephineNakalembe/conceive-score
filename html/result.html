@@ -4,8 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Conceive Score - Result</title>
+
 <style>
-body { font-family: Arial, sans-serif; margin:0; background:#f0f4f8; display:flex; min-height:100vh; }
+body {
+  font-family: Arial, sans-serif;
+  margin:0;
+  background:#f0f4f8;
+  display:flex;
+  min-height:100vh;
+}
 
 /* Sidebar */
 .sidebar {
@@ -18,12 +25,19 @@ body { font-family: Arial, sans-serif; margin:0; background:#f0f4f8; display:fle
   padding-top:20px;
   position:fixed;
 }
-.sidebar h2 { text-align:center; margin-bottom:20px; font-size:20px; }
+.sidebar h2 { text-align:center; margin-bottom:20px; }
 .sidebar p { text-align:center; margin-bottom:20px; }
-.sidebar a { padding:12px 20px; text-decoration:none; color:white; display:block; margin:5px 0; border-radius:5px; }
+.sidebar a {
+  padding:12px 20px;
+  text-decoration:none;
+  color:white;
+  display:block;
+  margin:5px 0;
+  border-radius:5px;
+}
 .sidebar a:hover { background:#20575a; }
 
-/* Top navbar */
+/* Navbar */
 .navbar {
   position:fixed;
   top:0; left:220px; right:0;
@@ -35,41 +49,90 @@ body { font-family: Arial, sans-serif; margin:0; background:#f0f4f8; display:fle
   padding:0 20px;
   color:white;
   box-shadow:0 2px 5px rgba(0,0,0,0.2);
-  z-index:100;
 }
-.navbar button { margin-left:15px; padding:8px 14px; background:#20575a; color:white; border:none; border-radius:5px; cursor:pointer; }
+.navbar button {
+  margin-left:15px;
+  padding:8px 14px;
+  background:#20575a;
+  color:white;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+}
 .navbar button:hover { background:#18625f; }
 
-/* Main content */
-.main-content { margin-left:220px; padding:20px; flex:1; margin-top:70px; text-align:center; }
-.card { background:white; padding:30px; border-radius:15px; box-shadow:0 4px 12px rgba(0,0,0,0.1); max-width:500px; margin:auto; }
-.result-value { font-size:2em; font-weight:bold; color:#20575a; margin-top:10px; }
+/* Main */
+.main-content {
+  margin-left:220px;
+  padding:20px;
+  flex:1;
+  margin-top:70px;
+  text-align:center;
+}
+
+.card {
+  background:white;
+  padding:30px;
+  border-radius:15px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+  max-width:500px;
+  margin:auto;
+}
+
+.result-value {
+  font-size:2em;
+  font-weight:bold;
+  color:#20575a;
+  margin-top:10px;
+}
+
 .advice { margin-top:20px; text-align:left; }
 .advice h3 { color:#2b7a78; }
-button.submit-btn { margin-top:20px; padding:12px 25px; background-color:#2b7a78; color:white; border:none; border-radius:8px; cursor:pointer; }
-button.submit-btn:hover { background-color:#20575a; }
 
-/* Simple graph placeholder */
-.graph { margin-top:20px; background:#e0f0f5; height:150px; border-radius:10px; display:flex; justify-content:center; align-items:center; color:#20575a; font-weight:bold; }
+.submit-btn {
+  margin-top:20px;
+  padding:12px 25px;
+  background-color:#2b7a78;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+.submit-btn:hover { background-color:#20575a; }
+
+.graph {
+  margin-top:20px;
+  background:#e0f0f5;
+  height:150px;
+  border-radius:10px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:#20575a;
+  font-weight:bold;
+  padding:10px;
+  text-align:center;
+}
 </style>
 </head>
+
 <body>
 
 <div class="sidebar">
   <h2>Conceive Score</h2>
   <p id="usernameDisplay">Guest</p>
- <a href="dashboard.html"><span>🏠</span> Dashboard</a>
- <a href="profile.html"><span>👤</span> Profile</a>
-    <a href="predict.html"><span>📝</span> Make Prediction</a>
-    <a href="history.html"><span>📜</span> Cycle History</a>
-    <a href="Tips & Guidelines.html"><span>💡</span> Tips & Guides</a>
-    <a href="settings.html"><span>⚙️</span> Settings</a>
-    <a href="coceptionstatus.html"><span>📊</span> Conception Stats</a>
-    <a href="notification.html"><span>🔔</span> Notifications</a>
+  <a href="dashboard.html">🏠 Dashboard</a>
+  <a href="profile.html">👤 Profile</a>
+  <a href="predict.html">📝 Make Prediction</a>
+  <a href="history.html">📜 Cycle History</a>
+  <a href="Tips & Guidelines.html">💡 Tips & Guides</a>
+  <a href="settings.html">⚙️ Settings</a>
+  <a href="coceptionstatus.html">📊 Conception Stats</a>
+  <a href="notification.html">🔔 Notifications</a>
 </div>
 
 <div class="navbar">
-  <span id="welcomeMessage">Welcome to Conceive Score</span>
+  <span id="welcomeMessage">Welcome</span>
   <button onclick="window.location.href='dashboard.html'">Dashboard</button>
   <button onclick="window.location.href='predict.html'">Predict</button>
   <button onclick="window.location.href='history.html'">History</button>
@@ -80,43 +143,94 @@ button.submit-btn:hover { background-color:#20575a; }
     <h2>Conception Probability</h2>
     <p class="result-value" id="resultValue">Loading...</p>
 
-    <div class="advice" id="adviceSection">
-      <h3>Advice to Improve Chances:</h3>
+    <div class="advice">
+      <h3>Personalized Advice:</h3>
       <ul id="adviceList"></ul>
     </div>
 
-    <div class="graph">YOUR CHANCES ARE QUITE HIGH!!
-      IF GOAL IS CONCEPTION: MAINTAIN A HEALTHY LIFESTYLE.
-      IF NOT: USE EFFECTIVE BIRTH CONTROL METHOD! 
-    </div>
+    <div class="graph" id="graphMessage"></div>
 
-    <button class="submit-btn" onclick="window.location.href='predict.html'">Back to Predict</button>
+    <button class="submit-btn" onclick="window.location.href='predict.html'">
+      Back to Predict
+    </button>
   </div>
 </div>
 
 <script>
 const storedData = localStorage.getItem('last_prediction');
 const name = localStorage.getItem('patient_name') || 'Guest';
+
 document.getElementById('usernameDisplay').textContent = name;
-document.getElementById('welcomeMessage').textContent = `Welcome ${name} to Conceive Score`;
+document.getElementById('welcomeMessage').textContent = `Welcome ${name}`;
 
 if(storedData){
+
   const result = JSON.parse(storedData);
-  const prob = result.probability ? (result.probability*100).toFixed(2)+'%' : 'No result found';
-  document.getElementById('resultValue').textContent = prob;
+  const probability = result.probability || 0;
+  const percentage = (probability * 100).toFixed(1);
 
-  // Example advice logic
+  document.getElementById('resultValue').textContent = percentage + '%';
+
   const advice = [];
-  if(result.AGE && result.AGE>35) advice.push("Consider consulting a fertility specialist for age-related guidance.");
-  if(result.BMI && (result.BMI<18.5 || result.BMI>25)) advice.push("Maintain a healthy BMI for optimal fertility.");
-  if(result.Workout_Type==0) advice.push("Incorporate light to moderate physical activity.");
-  if(result.diet_type==0) advice.push("Adopt a balanced diet rich in vitamins and minerals.");
+  let message = "";
 
+  /* ===== BASED ON PERCENTAGE ===== */
+  if(percentage < 30){
+    message = "Low chances of conception currently.";
+    advice.push("Track ovulation more accurately using a calendar or kit.");
+    advice.push("Ensure regular cycles and monitor hormonal health.");
+  }
+  else if(percentage >= 30 && percentage < 70){
+    message = "Moderate chances of conception.";
+    advice.push("Time intercourse during fertile window.");
+    advice.push("Maintain consistency in healthy habits.");
+  }
+  else{
+    message = "High chances of conception!";
+    advice.push("Continue maintaining a healthy lifestyle.");
+    advice.push("Ensure proper timing for best outcomes.");
+  }
+
+  /* ===== PERSONAL FACTORS ===== */
+  if(result.AGE > 35){
+    advice.push("Consider consulting a fertility specialist (age factor).");
+  }
+
+  if(result.BMI){
+    if(result.BMI < 18.5){
+      advice.push("Increase nutritional intake to reach a healthy BMI.");
+    }
+    else if(result.BMI > 25){
+      advice.push("Weight management may improve fertility outcomes.");
+    }
+  }
+
+  if(result.Workout_Type == 0){
+    advice.push("Introduce light to moderate exercise weekly.");
+  }
+
+  if(result.diet_type == 0){
+    advice.push("Adopt a balanced diet rich in fruits, vegetables, and proteins.");
+  }
+
+  if(result.sleep_hours && result.sleep_hours < 6){
+    advice.push("Improve sleep quality—aim for 7–8 hours per night.");
+  }
+
+  /* ===== RENDER ===== */
   const adviceList = document.getElementById('adviceList');
-  advice.forEach(a => {
-    const li = document.createElement('li'); li.textContent = a; adviceList.appendChild(li);
+  adviceList.innerHTML = "";
+
+  advice.forEach(item => {
+    const li = document.createElement('li');
+    li.textContent = item;
+    adviceList.appendChild(li);
   });
-} else {
+
+  document.getElementById('graphMessage').textContent = message;
+
+}
+else{
   document.getElementById('resultValue').textContent = 'No prediction data found.';
 }
 </script>
