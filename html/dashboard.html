@@ -155,6 +155,29 @@ body{
 .day.period{background:var(--pink);color:white;}
 .day.fertile{background:var(--lavender);color:white;}
 
+/* FLOATING BUTTON */
+.floating-btn{
+  position:fixed;
+  bottom:25px;
+  right:25px;
+  background:linear-gradient(135deg,#ff6b81,#ff8fa3);
+  color:white;
+  padding:14px 18px;
+  border-radius:50px;
+  font-weight:700;
+  text-decoration:none;
+  box-shadow:0 8px 20px rgba(0,0,0,0.2);
+  display:flex;
+  align-items:center;
+  gap:8px;
+  z-index:999;
+  transition:0.3s ease;
+}
+.floating-btn:hover{
+  transform:scale(1.08);
+  box-shadow:0 12px 25px rgba(0,0,0,0.25);
+}
+
 .weekdays{
   display:grid;
   grid-template-columns:repeat(7,1fr);
@@ -166,7 +189,6 @@ body{
 
 <body>
 
-<!-- ===== YOUR ORIGINAL SIDEBAR RESTORED ===== -->
 <div class="sidebar">
   <h2>Conceive Score</h2>
   <p id="usernameDisplay">Guest</p>
@@ -181,31 +203,26 @@ body{
   <a href="notification.html"><span>🔔</span> Notifications</a>
 </div>
 
-<!-- NAVBAR -->
 <div class="navbar">
   <div style="flex:1"></div>
   <div id="welcomeMessage">Welcome</div>
 </div>
 
-<!-- MAIN -->
 <div class="main-content">
 
 <div class="left-column">
 
-<!-- PREDICTION -->
 <div class="card prediction-card">
   <h3>Conception Chance</h3>
   <div class="circle" id="progressCircle">0%</div>
   <p id="latestPrediction">No prediction yet</p>
 </div>
 
-<!-- STATUS -->
 <div class="card">
   <h3>Today's Fertility Status</h3>
   <div id="fertilityStatus" class="status">Checking...</div>
 </div>
 
-<!-- BREAKDOWN -->
 <div class="card">
   <h3>Cycle Probability Breakdown</h3>
 
@@ -223,7 +240,6 @@ body{
 
 <div class="right-column">
 
-<!-- INSIGHTS -->
 <div class="card">
   <h3>Cycle Insights</h3>
   <p>Cycle Length: <b id="cycleStat"></b></p>
@@ -231,7 +247,6 @@ body{
   <p>Fertile Window: <b id="fertileStat"></b></p>
 </div>
 
-<!-- CALENDAR -->
 <div class="card">
   <h3>Cycle Calendar</h3>
 
@@ -247,13 +262,16 @@ body{
 
 </div>
 
+<!-- FLOATING BUTTON -->
+<a href="predict.html" class="floating-btn">
+  📝 Predict
+</a>
+
 <script>
-// USER
 const name = localStorage.getItem('patient_name');
 document.getElementById('usernameDisplay').textContent = name || 'Guest';
 document.getElementById('welcomeMessage').textContent = name ? `Welcome ${name}` : 'Welcome';
 
-// PREDICTION
 const lastPrediction = JSON.parse(localStorage.getItem('last_prediction') || 'null');
 
 if(lastPrediction){
@@ -267,7 +285,6 @@ if(lastPrediction){
   document.getElementById('progressCircle').textContent = p + "%";
 }
 
-// CYCLE DATA
 const cycleLength = parseInt(localStorage.getItem('cycle_length')) || 28;
 const lutealLength = parseInt(localStorage.getItem('luteal_length')) || 14;
 
@@ -279,7 +296,6 @@ document.getElementById('cycleStat').textContent = cycleLength;
 document.getElementById('ovuStat').textContent = ovulation;
 document.getElementById('fertileStat').textContent = `${fertileStart}-${fertileEnd}`;
 
-// STATUS
 let status = "Low Fertility";
 let color = "var(--teal)";
 
@@ -299,12 +315,10 @@ statusBox.textContent = status;
 statusBox.style.background = color;
 statusBox.style.color = "white";
 
-// BARS
 document.getElementById('fertileBar').style.width = "70%";
 document.getElementById('ovulationBar').style.width = "90%";
 document.getElementById('nonFertileBar').style.width = "40%";
 
-// CALENDAR
 const cal = document.getElementById('cycleCalendar');
 for(let i=1;i<=30;i++){
   const d=document.createElement('div');

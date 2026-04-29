@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Conceive Score - Conception Stats</title>
 
-<!-- Fonts & Chart.js -->
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -18,14 +17,14 @@
   --bg:#f0f4f8;
 }
 body{
-  font-family: 'Montserrat', Arial, sans-serif;
+  font-family:'Montserrat', Arial, sans-serif;
   margin:0;
   background:var(--bg);
   display:flex;
   min-height:100vh;
 }
 
-/* Sidebar */
+/* Sidebar (UNCHANGED) */
 .sidebar{
   height:100vh;
   width:220px;
@@ -36,35 +35,61 @@ body{
   padding-top:18px;
   position:fixed;
 }
-.sidebar h2{ text-align:center; margin:8px 0 10px; font-size:20px; font-weight:700; }
-.sidebar p{ text-align:center; margin:6px 8px; font-weight:500; }
+.sidebar h2{text-align:center;margin:8px 0 10px;font-size:20px;font-weight:700;}
+.sidebar p{text-align:center;margin:6px 8px;font-weight:500;}
 .sidebar a{
-  padding:10px 14px; text-decoration:none; color:white; display:flex; align-items:center;
-  gap:10px; margin:6px; border-radius:8px; font-weight:500;
+  padding:10px 14px;
+  text-decoration:none;
+  color:white;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:6px;
+  border-radius:8px;
+  font-weight:500;
 }
-.sidebar a:hover{ background:var(--teal-dark); }
+.sidebar a:hover{background:var(--teal-dark);}
 
 /* Navbar */
 .navbar{
-  position:fixed; top:0; left:220px; right:0; height:64px;
-  background:var(--teal); display:flex; align-items:center;
-  padding:0 18px; color:white; box-shadow:0 2px 6px rgba(0,0,0,0.12); z-index:100;
+  position:fixed;
+  top:0; left:220px; right:0;
+  height:64px;
+  background:var(--teal);
+  display:flex;
+  align-items:center;
+  padding:0 18px;
+  color:white;
+  box-shadow:0 2px 6px rgba(0,0,0,0.12);
+  z-index:100;
 }
-#welcomeMessage { margin-left:auto; margin-right:14px; font-weight:700; font-size:16px; }
+#welcomeMessage{margin-left:auto;margin-right:14px;font-weight:700;}
 .nav-icon{
-  margin-left:8px; background:transparent; border:none; color:white; font-size:18px;
-  width:44px; height:44px; border-radius:10px; cursor:pointer;
+  margin-left:8px;
+  background:transparent;
+  border:none;
+  color:white;
+  font-size:18px;
+  width:44px;
+  height:44px;
+  border-radius:10px;
+  cursor:pointer;
 }
-.nav-icon:hover{ background:var(--teal-dark); }
+.nav-icon:hover{background:var(--teal-dark);}
 
-/* Main content */
-.main-content{ margin-left:220px; padding:22px; flex:1; margin-top:80px; }
-h1{ color:var(--teal); text-align:center; margin-bottom:25px; }
+/* Main */
+.main-content{
+  margin-left:220px;
+  padding:22px;
+  flex:1;
+  margin-top:80px;
+}
+h1{color:var(--teal);text-align:center;margin-bottom:25px;}
 
-/* Stats cards */
+/* Cards */
 .stats-grid{
   display:grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px,1fr));
+  grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
   gap:18px;
   margin-bottom:25px;
 }
@@ -73,19 +98,14 @@ h1{ color:var(--teal); text-align:center; margin-bottom:25px; }
   padding:20px;
   border-radius:12px;
   box-shadow:0 6px 18px rgba(0,0,0,0.06);
-  transition:transform 0.2s, box-shadow 0.2s;
 }
-.stat-card:hover{
-  transform:translateY(-4px);
-  box-shadow:0 12px 28px rgba(0,0,0,0.12);
-}
-.stat-card h3{ margin-top:0; color:var(--teal); }
-.stat-card p{ color:var(--muted); font-size:14px; line-height:1.4; }
+.stat-card h3{margin-top:0;color:var(--teal);}
+.stat-card p{color:var(--muted);font-size:14px;}
 
-/* Charts section */
+/* Charts */
 .charts-grid{
   display:grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns:1fr 1fr;
   gap:20px;
 }
 .chart-card{
@@ -94,136 +114,166 @@ h1{ color:var(--teal); text-align:center; margin-bottom:25px; }
   border-radius:12px;
   box-shadow:0 6px 18px rgba(0,0,0,0.06);
 }
-.chart-card h3{ margin:0 0 10px; color:var(--teal); }
+.chart-card h3{margin:0 0 10px;color:var(--teal);}
+
+/* Lists */
+ul{padding-left:18px;}
+li{margin-bottom:6px;}
+
+/* Floating Button */
+.floating-btn{
+  position:fixed;
+  bottom:25px;
+  right:25px;
+  background:#ff6b81;
+  color:white;
+  padding:14px 18px;
+  border-radius:50px;
+  font-weight:700;
+  text-decoration:none;
+  box-shadow:0 8px 20px rgba(0,0,0,0.2);
+  z-index:999;
+}
 
 /* Responsive */
 @media(max-width:1000px){
-  .charts-grid{ grid-template-columns:1fr; }
-  .navbar{ left:0; }
-  .sidebar{ display:none; }
-  .main-content{ margin-left:0; margin-top:70px; padding:14px; }
+  .charts-grid{grid-template-columns:1fr;}
+  .navbar{left:0;}
+  .sidebar{display:none;}
+  .main-content{margin-left:0;margin-top:70px;}
 }
 </style>
 </head>
+
 <body>
 
 <div class="sidebar">
   <h2>Conceive Score</h2>
   <p id="usernameDisplay">Guest</p>
- <a href="dashboard.html"><span>🏠</span> Dashboard</a>
- <a href="profile.html"><span>👤</span> Profile</a>
-    <a href="predict.html"><span>📝</span> Make Prediction</a>
-    <a href="history.html"><span>📜</span> Cycle History</a>
-    <a href="Tips & Guidelines.html"><span>💡</span> Tips & Guides</a>
-    <a href="settings.html"><span>⚙️</span> Settings</a>
-    <a href="coceptionstatus.html"><span>📊</span> Conception Stats</a>
-    <a href="notification.html"><span>🔔</span> Notifications</a>
+  <a href="dashboard.html">🏠 Dashboard</a>
+  <a href="profile.html">👤 Profile</a>
+  <a href="predict.html">📝 Make Prediction</a>
+  <a href="history.html">📜 Cycle History</a>
+  <a href="Tips & Guidelines.html">💡 Tips & Guides</a>
+  <a href="settings.html">⚙️ Settings</a>
+  <a href="coceptionstatus.html">📊 Conception Stats</a>
+  <a href="notification.html">🔔 Notifications</a>
 </div>
+
 <div class="navbar">
   <div style="flex:1"></div>
-  <div id="welcomeMessage">Welcome to Conceive Score</div>
-  <button class="nav-icon" title="Dashboard" onclick="location.href='dashboard.html'">🏠</button>
-  <button class="nav-icon" title="Predict" onclick="location.href='predict.html'">📝</button>
-  <button class="nav-icon" title="History" onclick="location.href='history.html'">📜</button>
+  <div id="welcomeMessage">Welcome</div>
 </div>
 
 <div class="main-content">
-  <h1>Conception Statistics</h1>
+<h1>Conception Statistics</h1>
 
-  <!-- Stats Cards -->
-  <div class="stats-grid">
-    <div class="stat-card">
-      <h3>Average Probability</h3>
-      <p id="avgProbability">--%</p>
-    </div>
-    <div class="stat-card">
-      <h3>Most Recent Cycle Probability</h3>
-      <p id="latestProbability">--%</p>
-    </div>
-    <div class="stat-card">
-      <h3>Total Predictions</h3>
-      <p id="totalPredictions">--</p>
-    </div>
-    <div class="stat-card">
-      <h3>Successful Conceptions</h3>
-      <p id="successfulConceptions">--</p>
-    </div>
+<div class="stats-grid">
+  <div class="stat-card"><h3>Average Probability</h3><p id="avgProbability">--%</p></div>
+  <div class="stat-card"><h3>Latest Probability</h3><p id="latestProbability">--%</p></div>
+  <div class="stat-card"><h3>Total Predictions</h3><p id="totalPredictions">--</p></div>
+  <div class="stat-card"><h3>Successful Conceptions</h3><p id="successfulConceptions">--</p></div>
+</div>
+
+<!-- NEW INSIGHT SECTION -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <h3>What This Means</h3>
+    <p id="insightText">Analyzing...</p>
   </div>
-
-  <!-- Charts -->
-  <div class="charts-grid">
-    <div class="chart-card">
-      <h3>Factors Affecting Conception</h3>
-      <canvas id="factorsPie" height="220"></canvas>
-    </div>
-    <div class="chart-card">
-      <h3>Cycle Probabilities</h3>
-      <canvas id="probabilitiesBar" height="220"></canvas>
-    </div>
+  <div class="stat-card">
+    <h3>Best Time to Try</h3>
+    <p id="bestTime">Calculating...</p>
+  </div>
+  <div class="stat-card">
+    <h3>Recommendations</h3>
+    <ul id="recommendations"></ul>
   </div>
 </div>
 
+<div class="charts-grid">
+  <div class="chart-card">
+    <h3>Factors Affecting Conception</h3>
+    <canvas id="factorsPie"></canvas>
+  </div>
+  <div class="chart-card">
+    <h3>Cycle Probabilities</h3>
+    <canvas id="probabilitiesBar"></canvas>
+  </div>
+</div>
+</div>
+
+<a href="predict.html" class="floating-btn">📝 Predict</a>
+
 <script>
-// Show username
+// USER
 const name = localStorage.getItem('patient_name') || 'Guest';
 document.getElementById('usernameDisplay').textContent = name;
-document.getElementById('welcomeMessage').textContent = `Welcome ${name} — Conceive Score`;
+document.getElementById('welcomeMessage').textContent = `Welcome ${name}`;
 
-// Load history
+// DATA
 const history = JSON.parse(localStorage.getItem('prediction_history')||'[]');
 const total = history.length;
-let sumProb=0;
-let lastProb=0;
-let successful=0;
+let sum=0, last=0, success=0;
 
 history.forEach(h=>{
-  if(h.probability != null){
-    sumProb += h.probability;
-    lastProb = h.probability;
-    if(h.successful) successful++;
+  if(h.probability!=null){
+    sum+=h.probability;
+    last=h.probability;
+    if(h.successful) success++;
   }
 });
 
-document.getElementById('avgProbability').textContent = total? Math.round((sumProb/total)*100)+'%' : '--%';
-document.getElementById('latestProbability').textContent = total? Math.round(lastProb*100)+'%' : '--%';
+document.getElementById('avgProbability').textContent = total?Math.round((sum/total)*100)+'%':'--%';
+document.getElementById('latestProbability').textContent = total?Math.round(last*100)+'%':'--%';
 document.getElementById('totalPredictions').textContent = total;
-document.getElementById('successfulConceptions').textContent = successful;
+document.getElementById('successfulConceptions').textContent = success;
 
-// Pie chart for factors (example weights)
-const ctxPie = document.getElementById('factorsPie').getContext('2d');
-new Chart(ctxPie,{
+// INSIGHTS
+let insight="Start making predictions to see insights.";
+let best="Not enough data.";
+let recs=[];
+
+if(total>0){
+  let avg=sum/total;
+
+  if(avg>0.7) insight="High fertility chances.";
+  else if(avg>0.4) insight="Moderate chances.";
+  else insight="Low chances currently.";
+
+  best="Days 12 - 16 are most fertile.";
+
+  if(avg<0.5){
+    recs.push("Improve nutrition");
+    recs.push("Track ovulation closely");
+  }
+  recs.push("Stay consistent with tracking");
+}
+
+document.getElementById('insightText').textContent=insight;
+document.getElementById('bestTime').textContent=best;
+
+const list=document.getElementById('recommendations');
+recs.forEach(r=>{
+  let li=document.createElement('li');
+  li.textContent=r;
+  list.appendChild(li);
+});
+
+// CHARTS
+new Chart(document.getElementById('factorsPie'),{
   type:'pie',
   data:{
-    labels:['Age','BMI','Hormones','Diet','Workout','Cycle Regularity'],
-    datasets:[{
-      data:[22,15,28,12,8,15],
-      backgroundColor:['#ff9e9e','#ffd79e','#7cd39c','#7fb3ff','#b088f9','#ffe28a'],
-      borderWidth:0
-    }]
-  },
-  options:{
-    responsive:true,
-    plugins:{legend:{position:'bottom'}}
+    labels:['Age','BMI','Hormones','Diet','Workout','Cycle'],
+    datasets:[{data:[22,15,28,12,8,15]}]
   }
 });
 
-// Bar chart for past probabilities
-const ctxBar = document.getElementById('probabilitiesBar').getContext('2d');
-new Chart(ctxBar,{
+new Chart(document.getElementById('probabilitiesBar'),{
   type:'bar',
   data:{
-    labels: history.map((h,i)=>`Cycle ${i+1}`),
-    datasets:[{
-      label:'Probability (%)',
-      data: history.map(h=>Math.round(h.probability*100)),
-      backgroundColor:'#7cd39c'
-    }]
-  },
-  options:{
-    responsive:true,
-    scales:{
-      y:{ beginAtZero:true, max:100 }
-    }
+    labels:history.map((h,i)=>`Cycle ${i+1}`),
+    datasets:[{data:history.map(h=>Math.round(h.probability*100))}]
   }
 });
 </script>
