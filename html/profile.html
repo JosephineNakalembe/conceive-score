@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Conceive Score - Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--teal:#2b7a78;--teal-dark:#20575a;--muted:#6b6f72;--card-bg:#ffffff;--bg:#f0f4f8;}
+body{font-family:'Montserrat', Arial, sans-serif;margin:0;background:var(--bg);display:flex;min-height:100vh;}
+.sidebar{height:100vh;width:220px;background:var(--teal);color:white;display:flex;flex-direction:column;padding-top:18px;position:fixed;}
+.sidebar h2{text-align:center;margin:8px 0 10px;font-size:20px;font-weight:700;}
+.sidebar p{text-align:center;margin:6px 8px;font-weight:500;}
+.sidebar a{padding:10px 14px;text-decoration:none;color:white;display:flex;align-items:center;gap:10px;margin:6px;border-radius:8px;font-weight:500;}
+.sidebar a:hover{background:var(--teal-dark);}
+.navbar{position:fixed;top:0;left:220px;right:0;height:64px;background:var(--teal);display:flex;align-items:center;padding:0 18px;color:white;box-shadow:0 2px 6px rgba(0,0,0,0.12);z-index:100;}
+#welcomeMessage{margin-left:auto;margin-right:14px;font-weight:700;font-size:16px;}
+.nav-icon{margin-left:8px;background:transparent;border:none;color:white;font-size:18px;width:44px;height:44px;border-radius:10px;cursor:pointer;}
+.nav-icon:hover{background:var(--teal-dark);}
+.main-content{margin-left:220px;padding:22px;flex:1;margin-top:80px;}
+h1{color:var(--teal);text-align:center;margin-bottom:25px;}
+.card{background:var(--card-bg);padding:20px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.06);margin-bottom:20px;transition:0.3s;}
+.card:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(0,0,0,0.12);}
+button{padding:10px 14px;border:none;border-radius:10px;background:var(--teal);color:white;font-weight:700;cursor:pointer;transition:0.2s;margin-top:10px;}
+button:hover{background:var(--teal-dark);}
+.value-display{font-size:16px;color:#333;font-weight:500;}
+.info{font-size:13px;color:var(--muted);margin-top:5px;}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>Conceive Score</h2>
+  <p id="usernameDisplay">Guest</p>
+ <a href="dashboard.html"><span>🏠</span> Dashboard</a>
+ <a href="profile.html"><span>👤</span> Profile</a>
+    <a href="predict.html"><span>📝</span> Make Prediction</a>
+    <a href="history.html"><span>📜</span> Cycle History</a>
+    <a href="Tips & Guidelines.html"><span>💡</span> Tips & Guides</a>
+    <a href="settings.html"><span>⚙️</span> Settings</a>
+    <a href="coceptionstatus.html"><span>📊</span> Conception Stats</a>
+    <a href="notification.html"><span>🔔</span> Notifications</a>
+</div>
+
+<div class="navbar">
+  <div style="flex:1"></div>
+  <div id="welcomeMessage">Welcome to Conceive Score</div>
+</div>
+
+<div class="main-content">
+  <h1>Your Profile</h1>
+  <div id="profileCards"></div>
+</div>
+
+<script>
+// Get user info
+const name = localStorage.getItem('patient_name'); 
+document.getElementById('usernameDisplay').textContent = name || 'Guest';
+document.getElementById('welcomeMessage').textContent = name ? `Welcome ${name} — Conceive Score` : 'Welcome to Conceive Score';
+
+// Load profile or create empty
+const profile = JSON.parse(localStorage.getItem('patient_profile')|| '{}');
+
+// Fields including hormones, health & cycle, lifestyle
+const fields = [
+  // Basic Info
+  {key:'AGE', label:'Age (years)', info:'Your age affects ovulation and fertility chances.'},
+  {key:'BMI', label:'BMI', info:'A healthy BMI helps maintain regular cycles.'},
+  {key:'Weight_kg', label:'Weight (kg)', info:'Weight influences hormone balance.'},
+  {key:'Height_m', label:'Height (m)', info:'Height can correlate with BMI and general health.'},
+  {key:'diet_type', label:'Diet Type', info:'Balanced diet improves reproductive health.'},
+  {key:'Workout_Type', label:'Workout Type', info:'Exercise affects hormone balance and ovulation.'},
+  // Hormones (auto-predicted)
+  {key:'E2', label:'Estradiol (E2)', info:'Estradiol supports ovulation and fertility.'},
+  {key:'Progesterone', label:'Progesterone', info:'Progesterone prepares the uterus for pregnancy.'},
+  {key:'LH', label:'Luteinizing Hormone (LH)', info:'LH triggers ovulation each cycle.'},
+  {key:'FSH', label:'Follicle Stimulating Hormone (FSH)', info:'FSH regulates egg development.'},
+  // Health & Cycle
+  {key:'any_disease', label:'Any Disease', info:'Certain conditions can affect fertility.'},
+  {key:'CycleNumber', label:'Cycle Number', info:'Tracks the number of menstrual cycles.'},
+  {key:'LengthofCycle', label:'Length of Cycle (days)', info:'Normal cycle length indicates ovulation health.'},
+  {key:'EstimatedDayofOvulation', label:'Estimated Day of Ovulation', info:'Day of ovulation helps predict fertility.'},
+  {key:'LengthofLutealPhase', label:'Length of Luteal Phase (days)', info:'Healthy luteal phase supports implantation.'},
+  {key:'TotalDaysofFertility', label:'Total Days of Fertility', info:'Number of fertile days per cycle.'},
+  {key:'Gravida', label:'Number of pregnancies', info:'Past pregnancies can influence conception chances.'}
+];
+
+const container = document.getElementById('profileCards');
+
+// Auto-calculate hormone values based on other profile fields
+function predictHormones(){
+  // Simple example logic
+  const age = Number(profile.AGE) || 25;
+  const bmi = Number(profile.BMI) || 22;
+  const weight = Number(profile.Weight_kg) || 60;
+  const workout = Number(profile.Workout_Type) || 1;
+
+  profile.E2 = (150 - age) + bmi + workout*5;        // arbitrary formula
+  profile.Progesterone = 10 + bmi*0.5;              // arbitrary formula
+  profile.LH = 5 + (25 - age)*0.2;                  // arbitrary formula
+  profile.FSH = 6 + (bmi-22)*0.3;                   // arbitrary formula
+
+  localStorage.setItem('patient_profile', JSON.stringify(profile));
+}
+
+predictHormones();
+
+// Render cards
+fields.forEach(f=>{
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <h3>${f.label}</h3>
+    <div class="value-display" id="val_${f.key}">${profile[f.key] || 'Not set'}</div>
+    <button onclick="updateField('${f.key}')">Update</button>
+    <div class="info">${f.info}</div>
+  `;
+  container.appendChild(card);
+});
+
+// Update field manually
+function updateField(key){
+  const newVal = prompt(`Enter new value for ${key}:`, profile[key] || '');
+  if(newVal !== null && newVal !== ''){
+    profile[key] = newVal;
+    // Recalculate hormones if related fields changed
+    if(['AGE','BMI','Weight_kg','Workout_Type'].includes(key)) predictHormones();
+    localStorage.setItem('patient_profile', JSON.stringify(profile));
+    document.getElementById(`val_${key}`).textContent = profile[key];
+    // Update hormone cards
+    ['E2','Progesterone','LH','FSH'].forEach(h=>{
+      document.getElementById(`val_${h}`).textContent = profile[h];
+    });
+    alert(`${key} updated successfully!`);
+  }
+}
+</script>
+
+</body>
+</html>

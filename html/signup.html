@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Conceive Score - Sign Up</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --teal:#2b7a78;
+  --teal-dark:#20575a;
+  --muted:#6b6f72;
+  --bg:#f7f9fc;
+  --accent1:#7cd39c;
+  --accent2:#5aa8ff;
+  --accent3:#ffb46b;
+}
+
+/* Base styles */
+body{
+  margin:0;
+  font-family:'Montserrat', Arial, sans-serif;
+  background:var(--bg);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.signup-container{
+  background:#fff;
+  padding:40px 30px;
+  border-radius:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.08);
+  width:100%;
+  max-width:400px;
+}
+
+.signup-container h2{
+  text-align:center;
+  color:var(--teal);
+  margin-bottom:24px;
+  font-size:24px;
+}
+
+.signup-container label{
+  display:block;
+  margin-bottom:6px;
+  font-weight:500;
+  color:var(--muted);
+}
+
+.signup-container input{
+  width:100%;
+  padding:12px 14px;
+  margin-bottom:16px;
+  border-radius:12px;
+  border:1px solid #ddd;
+  font-size:14px;
+}
+
+.signup-container input:focus{
+  outline:none;
+  border-color:var(--teal);
+  box-shadow:0 0 6px rgba(43,122,120,0.2);
+}
+
+.signup-container button{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:14px;
+  background:var(--accent2);
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+  font-size:16px;
+  transition:0.2s;
+}
+
+.signup-container button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 18px rgba(0,0,0,0.12);
+}
+
+.login-link{
+  text-align:center;
+  margin-top:12px;
+  font-size:14px;
+}
+
+.login-link a{
+  color:var(--teal);
+  text-decoration:none;
+  font-weight:600;
+}
+
+.login-link a:hover{
+  text-decoration:underline;
+}
+</style>
+</head>
+<body>
+
+<div class="signup-container">
+  <h2>Create Account</h2>
+  <form id="signupForm">
+    <label for="name">Full Name</label>
+    <input type="text" id="name" required placeholder="Enter your full name">
+    
+    <label for="email">Email</label>
+    <input type="email" id="email" required placeholder="Enter your email">
+    
+    <label for="password">Password</label>
+    <input type="password" id="password" required placeholder="Enter a password">
+    
+    <button type="submit">Sign Up</button>
+  </form>
+  <div class="login-link">
+    Already have an account? <a href="login.html">Log in</a>
+  </div>
+</div>
+
+<script>
+// Signup form handler
+document.getElementById('signupForm').addEventListener('submit', function(e){
+  e.preventDefault();
+
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+
+  if(name && email && password){
+    // Retrieve last patient ID from localStorage or start at 0
+    let lastId = parseInt(localStorage.getItem('last_patient_id') || '0', 10);
+    lastId++; // Increment ID for new user
+    const patientId = lastId.toString().padStart(3, '0'); // Format as 3-digit string
+
+    // Save user data and patient ID to localStorage
+    localStorage.setItem('patient_name', name);
+    localStorage.setItem('patient_email', email);
+    localStorage.setItem('patient_password', password);
+    localStorage.setItem('patient_id', patientId);
+    localStorage.setItem('last_patient_id', lastId); // Update last assigned ID
+
+    alert(`Welcome ${name}! Your account has been created.\nYour Patient ID: ${patientId}`);
+    window.location.href = 'dashboard.html';
+  } else {
+    alert('Please fill in all fields.');
+  }
+});
+</script>
+
+</body>
+</html>
